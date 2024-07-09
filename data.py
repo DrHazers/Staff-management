@@ -1,25 +1,51 @@
-import mysql.connector
+import sqlite3
 
-cnn = mysql.connector.connect(
-    host='localhost',
-    user='root',
-    password='123',
-    database='staff'
-)
+# 创建 SQLite 数据库连接
+conn = sqlite3.connect('staff.db')
 
-cursor = cnn.cursor()
+# 创建一个游标对象
+cursor = conn.cursor()
 
-# 读取 SQL 文件内容
-with open('staff_staff.sql', 'r', encoding='utf-8') as file:
-    sql_script = file.read()
+# 创建staff表
+cursor.execute('''CREATE TABLE IF NOT EXISTS staff (
+                  name TEXT,
+                  department TEXT,
+                  position TEXT,
+                  salary INTEGER)''')
 
-# 分割 SQL 文件中的语句
-sql_statements = sql_script.split(';')
-
-# 执行 SQL 脚本中的每个语句
-for statement in sql_statements:
-    if statement.strip():
-        cursor.execute(statement)
+# 插入数据
+cursor.executemany('''INSERT INTO staff (name, department, position, salary) VALUES (?, ?, ?, ?)''', [
+    ('刘萍', '技术部门', '技术负责人', 15000),
+    ('卢宇', '技术部门', '运维开发工程师', 10000),
+    ('邹旭', '技术部门', '项目经理', 10000),
+    ('陶晨', '技术部门', '后端开发工程师', 10000),
+    ('曹坤', '技术部门', '后端开发工程师', 10000),
+    ('周想', '技术部门', '前端开发工程师', 8000),
+    ('刘桂英', '总裁办', '总裁秘书', 4500),
+    ('张海燕', '总裁办', '普通员工', 3000),
+    ('何倩', '总裁办', '普通员工', 3000),
+    ('李华', '总裁办', '普通员工', 3000),
+    ('汪雪', '销售部门', '销售主管', 4500),
+    ('王丹', '销售部门', '普通员工', 2500),
+    ('黄辉', '销售部门', '普通员工', 2500),
+    ('黄平', '销售部门', '普通员工', 2500),
+    ('刘瑜', '销售部门', '普通员工', 2500),
+    ('殷文', '销售部门', '普通员工', 2500),
+    ('罗桂兰', '销售部门', '普通员工', 2500),
+    ('高桂香', '销售部门', '普通员工', 2500),
+    ('黄玉', '销售部门', '普通员工', 2500),
+    ('张琴', '销售部门', '普通员工', 2500),
+    ('李阳', '销售部门', '普通员工', 2500),
+    ('丁娜', '生产部门', '生成主管', 5000),
+    ('曲旭', '生产部门', '普通员工', 3500),
+    ('冉兵', '生产部门', '普通员工', 3500),
+    ('刘淑珍', '生产部门', '普通员工', 3500),
+    ('陈丽', '生产部门', '普通员工', 3500),
+    ('裴欢', '生产部门', '实习员', 2500),
+    ('徐凯', '生产部门', '实习员', 2500),
+    ('陈伟', '生产部门', '普通员工', 3500),
+    ('梁玉华', '生产部门', '实习员', 2500)
+])
 
 # 执行查询以获取表中的数据
 cursor.execute("SELECT * FROM staff")
@@ -35,4 +61,4 @@ salary_list = [dict(zip(columns, row)) for row in rows]
 
 # 关闭游标和数据库连接
 cursor.close()
-cnn.close()
+conn.close()
