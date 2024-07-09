@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, redirect, flash
 from data import salary_list
 
 app = Flask(__name__)
@@ -12,18 +12,13 @@ def hello_world():  # put application's code here
 
 @app.route('/login', methods=["POST"])
 def hello_login():
-    # 登录到服务器 获取用户名与密码,然后进行校验,再记录信息
-    # print(request.form)
+    # 登录
     username = request.form.get('username')
     password = request.form.get('password')
     print(username, password)
     # 获取用户名与密码,然后进行校验,再记录信息
-    # for sal in salary_list:
-    #     if sal['name'] == username:
-
-    # 登录成功之后返回后台页面
-    return render_template('admin.html',
-                           salary_list=salary_list)
+    if username == 'user' and password == '123':
+        return render_template('admin.html', salary_list=salary_list)
 
 
 @app.route('/delete/<name>')
