@@ -1,19 +1,15 @@
 import sqlite3
 
-# 创建 SQLite 数据库连接
 conn = sqlite3.connect('staff.db')
 
-# 创建一个游标对象
 cursor = conn.cursor()
 
-# 创建staff表
 cursor.execute('''CREATE TABLE IF NOT EXISTS staff (
                   name TEXT,
                   department TEXT,
                   position TEXT,
                   salary INTEGER)''')
 
-# 插入数据
 cursor.executemany('''INSERT INTO staff (name, department, position, salary) VALUES (?, ?, ?, ?)''', [
     ('刘萍', '技术部门', '技术负责人', 15000),
     ('卢宇', '技术部门', '运维开发工程师', 10000),
@@ -47,18 +43,14 @@ cursor.executemany('''INSERT INTO staff (name, department, position, salary) VAL
     ('梁玉华', '生产部门', '实习员', 2500)
 ])
 
-# 执行查询以获取表中的数据
 cursor.execute("SELECT * FROM staff")
 
-# 获取查询结果
 rows = cursor.fetchall()
 
-# 获取列名
 columns = [i[0] for i in cursor.description]
 
-# 转换查询结果为字典列表
 salary_list = [dict(zip(columns, row)) for row in rows]
 
-# 关闭游标和数据库连接
+print(salary_list)
 cursor.close()
 conn.close()

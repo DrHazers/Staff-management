@@ -6,15 +6,6 @@
     <link rel="stylesheet" href="/static/css/layui.css">
 </head>
 <body>
-{% with messages = get_flashed_messages() %}
-        {% if messages %}
-            <ul>
-                {% for message in messages %}
-                    <li>{{ message }}</li>
-                {% endfor %}
-            </ul>
-        {% endif %}
-    {% endwith %}
 <div style="width: 500px;height: 400px;margin: 100px auto;">
     <form class="layui-form" action="/login" method="POST">
         <div class="layui-form-item">
@@ -44,18 +35,21 @@
 </div>
 <script src="/static/layui.js"></script>
 <script>
-  //Demo
+  // // 监听页面加载事件
+  // window.onload = function() {
+  //   var messages = {{ get_flashed_messages()|tojson }}
+  //   if (messages.length > 0) {
+  //     layui.use('layer', function() {
+  //       var layer = layui.layer;
+  //       for (var i = 0; i < messages.length; i++) {
+  //         layer.msg(messages[i], {icon: 5});
+  //       }
+  //     });
+  //   }
+  // };
   layui.use('form', function () {
-    var form = layui.form
-    /*
-    //监听提交
-    form.on('submit(formDemo)', function (data) {
-      layer.msg(JSON.stringify(data.field))
-      // 可以发送动态请求
-      return false
-    })
-    */
-  })
+    var form = layui.form;
+  });
 </script>
 </body>
 </html>

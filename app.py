@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request, redirect, flash
 from data import salary_list
+from user_data import user_list
 
 app = Flask(__name__)
 
@@ -17,9 +18,12 @@ def hello_login():
     password = request.form.get('password')
     print(username, password)
     # 获取用户名与密码,然后进行校验,再记录信息
-    if username == 'user' and password == '123':
-        return render_template('admin.html', salary_list=salary_list)
-
+    for user in user_list:
+        if username == user['username'] and password == user['password']:
+            return render_template('admin.html', salary_list=salary_list)
+        else:
+            flash('登录失败，用户名或密码错误！')
+            return redirect('/login')
 
 @app.route('/delete/<name>')
 def hello_delete(name):  # put application's code here
