@@ -4,20 +4,16 @@ from user_data import user_list
 
 app = Flask(__name__)
 
-
 @app.route('/')
 def hello_world():  # put application's code here
-    # 返回网页文件
     return render_template('index.html')
 
-
+# 登录模块
 @app.route('/login', methods=["POST"])
 def hello_login():
-    # 登录
     username = request.form.get('username')
     password = request.form.get('password')
     print(username, password)
-    # 获取用户名与密码,然后进行校验,再记录信息
     for user in user_list:
         if username == user['username'] and password == user['password']:
             return render_template('admin.html', salary_list=salary_list)
@@ -25,34 +21,29 @@ def hello_login():
             flash('登录失败，用户名或密码错误！')
             return redirect('/login')
 
+# 删除模块
 @app.route('/delete/<name>')
 def hello_delete(name):  # put application's code here
-    # 删除逻辑 先找到信息,然后再删除
     for salary in salary_list:
         if salary['name'] == name:
-            # 列表删除元素的几种方式
             salary_list.remove(salary)
     return render_template('admin.html',
                            salary_list=salary_list)
 
-
+# 修改模块 选择先调用删除再调用添加模块
 @app.route('/change/<name>')
 def hello_change(name):  # put application's code here
-    # 删除逻辑 先找到信息,然后再删除
     for salary in salary_list:
         if salary['name'] == name:
-            # 应该是在前端进行修改
             return render_template('change.html',
                                    user=salary)
 
     return render_template('admin.html',
                            salary_list=salary_list)
 
-
+# 修改模块
 @app.route('/changed/<name>', methods=["POST"])
 def hello_changed(name):
-    """修改 拿到提交的信息"""
-    # 删除逻辑 先找到信息,然后再删除
     for salary in salary_list:
         if salary['name'] == name:
             salary['name'] = request.form.get('name')
@@ -63,23 +54,20 @@ def hello_changed(name):
     return render_template('admin.html',
                            salary_list=salary_list)
 
-
+# 跳转至添加界面
 @app.route('/add')
 def hello_add():
     return render_template('add.html')
 
-
+# 添加模块
 @app.route('/add2', methods=['POST'])
 def hello_add2():
     salary = {}
-    # 获取浏览器发送过来的数据
     salary['name'] = request.form.get('name')
     salary['department'] = request.form.get('department')
     salary['position'] = request.form.get('position')
     salary['salary'] = request.form.get('salary')
-    # 将数据保存
     salary_list.insert(0, salary)
-    # 返回保存之后的页面
     return render_template('admin.html',
                            salary_list=salary_list)
 
